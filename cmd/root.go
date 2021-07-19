@@ -24,19 +24,26 @@ SOFTWARE.
 package cmd
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-// var cfgFile string
-
 // rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "go-gadget-go",
-	Short: "Generate extra facts from command-line tools",
-	Long: `Generate extra or additional facts from various 
+var (
+	debugFlag bool
+	rootCmd   = &cobra.Command{
+		Use:   "go-gadget-go",
+		Short: "Generate extra facts from command-line tools",
+		Long: `Generate extra or additional facts from various 
 	command-line tools. Allows extending the facts you can use
 	with a tool like Ansible.`,
-}
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			if debugFlag {
+				log.SetLevel(log.DebugLevel)
+			}
+		},
+	}
+)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -45,29 +52,5 @@ func Execute() {
 }
 
 func init() {
-	// cobra.OnInitialize(initConfig)
+	rootCmd.PersistentFlags().BoolVarP(&debugFlag, "debug", "d", false, "debug output")
 }
-
-// initConfig reads in config file and ENV variables if set.
-// func initConfig() {
-// 	if cfgFile != "" {
-// 		// Use config file from the flag.
-// 		viper.SetConfigFile(cfgFile)
-// 	} else {
-// 		// Find home directory.
-// 		home, err := os.UserHomeDir()
-// 		cobra.CheckErr(err)
-
-// 		// Search config in home directory with name ".ggg" (without extension).
-// 		viper.AddConfigPath(home)
-// 		viper.SetConfigType("yaml")
-// 		viper.SetConfigName(".ggg")
-// 	}
-
-// 	viper.AutomaticEnv() // read in environment variables that match
-
-// 	// If a config file is found, read it in.
-// 	if err := viper.ReadInConfig(); err == nil {
-// 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-// 	}
-// }

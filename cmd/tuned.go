@@ -56,7 +56,7 @@ var tunedOutput tuned
 func tunedAll() {
 	out, err := exec.Command("/usr/sbin/tuned-adm", "active").Output()
 	if err != nil {
-		log.Fatal(err)
+		log.Debugf("Failed to execute command: %v", err)
 	}
 	f := func(c rune) bool {
 		return c == ':' || unicode.IsControl(c)
@@ -65,7 +65,8 @@ func tunedAll() {
 	tunedOutput.ActiveProfile = string(bytes.TrimSpace(fields[1]))
 	jsonOut, err := json.Marshal(tunedOutput)
 	if err != nil {
-		log.Errorf("error:", err)
+		log.Debugf("Failed to parse to JSON:", err)
+		return
 	}
 	os.Stdout.Write(jsonOut)
 }

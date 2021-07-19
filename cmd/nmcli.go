@@ -97,7 +97,8 @@ func nmcliAll() {
 func nmcliConnection() {
 	out, err := exec.Command("/usr/bin/nmcli", "--terse", "connection", "show").Output()
 	if err != nil {
-		log.Fatal(err)
+		log.Debugf("Failed to execute command: %v", err)
+		return
 	}
 	lines := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
 	f := func(c rune) bool {
@@ -121,7 +122,8 @@ func nmcliConnection() {
 func nmcliDevice() {
 	out, err := exec.Command("/usr/bin/nmcli", "--terse", "device").Output()
 	if err != nil {
-		log.Fatal(err)
+		log.Debugf("Failed to execute command: %v", err)
+		return
 	}
 	lines := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
 	f := func(c rune) bool {
@@ -145,7 +147,8 @@ func nmcliDevice() {
 func toJson() {
 	jsonOut, err := json.Marshal(nmcliOutput)
 	if err != nil {
-		log.Errorf("error:", err)
+		log.Debugf("Failed to parse to JSON:", err)
+		return
 	}
 	os.Stdout.Write(jsonOut)
 }
