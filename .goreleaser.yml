@@ -21,20 +21,35 @@ nfpms:
     id: github.com/joshuar/go-gadget-go
     package_name: go-gadget-go
     vendor: github.com/joshuar
-    homepage: https://github.com/joshuar/cf-ddns
+    homepage: https://github.com/joshuar/go-gadget-go
     maintainer: Josh Rich <joshua.rich@gmail.com>
-    description: A Dynamic DNS client for Cloudflare.
+    description: Generate extra facts for Ansible from command-line tools
     license: MIT
     release: 1
     formats:
       - deb
       - rpm
+    replacements:
+      amd64: x86_64
+      386: i386
     section: default
     priority: extra
-    dependencies:
+    recommends:
       - ansible
+    bindir: /usr/bin
     contents:
-      - src: assets/ansible/facts.d/nmcli.fact
+      - src: assets/usr/bin/go-gadget-go.sh
+        dst: /usr/bin/go-gadget-go.sh
+      - src: /usr/bin/go-gadget-go.sh
         dst: /etc/ansible/facts.d/nmcli.fact
-      - src: assets/ansible/facts.d/tuned.fact
+        type: "symlink"
+      - src: /usr/bin/go-gadget-go.sh
         dst: /etc/ansible/facts.d/tuned.fact
+        type: "symlink"
+      - src: /usr/bin/go-gadget-go.sh
+        dst: /etc/ansible/facts.d/firewalld.fact
+        type: "symlink"
+      - src: LICENSE
+        dst: /usr/share/go-gadget-go/LICENSE
+      - src: README.md
+        dst: /usr/share/go-gadget-go/README.md

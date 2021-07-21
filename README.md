@@ -1,5 +1,8 @@
 # go-gadget-go
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/joshuar/go-gadget-go?style=flat-square)](https://goreportcard.com/report/github.com/joshuar/go-gadget-go)
+[![Release](https://img.shields.io/github/release/joshuar/go-gadget-go.svg?style=flat-square)](https://github.com/joshuar/go-gadget-go/releases/latest)
+
 go-gadget-go allows you to add [custom facts](https://docs.ansible.com/ansible/latest/user_guide/playbooks_vars_facts.html)
 for use with [Ansible](https://www.ansible.com/).
 

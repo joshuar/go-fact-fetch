@@ -75,7 +75,7 @@ var connectionCmd = &cobra.Command{
 	Short: "Get overview of connections from NetworkManager",
 	Run: func(cmd *cobra.Command, args []string) {
 		nmcliConnection()
-		toJson()
+		nmCliJson()
 	},
 }
 
@@ -84,14 +84,14 @@ var deviceCmd = &cobra.Command{
 	Short: "Get overview of devices from NetworkManager",
 	Run: func(cmd *cobra.Command, args []string) {
 		nmcliDevice()
-		toJson()
+		nmCliJson()
 	},
 }
 
 func nmcliAll() {
 	nmcliConnection()
 	nmcliDevice()
-	toJson()
+	nmCliJson()
 }
 
 func nmcliConnection() {
@@ -144,7 +144,7 @@ func nmcliDevice() {
 	}
 }
 
-func toJson() {
+func nmCliJson() {
 	jsonOut, err := json.Marshal(nmcliOutput)
 	if err != nil {
 		log.Debugf("Failed to parse to JSON:", err)

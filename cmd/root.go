@@ -33,7 +33,7 @@ var (
 	debugFlag bool
 	rootCmd   = &cobra.Command{
 		Use:   "go-gadget-go",
-		Short: "Generate extra facts from command-line tools",
+		Short: "Generate extra facts for Ansible from command-line tools",
 		Long: `Generate extra or additional facts from various 
 	command-line tools. Allows extending the facts you can use
 	with a tool like Ansible.`,

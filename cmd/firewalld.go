@@ -28,35 +28,34 @@ import (
 	"encoding/json"
 	"os"
 	"os/exec"
-	"unicode"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-// tunedAdmCmd represents the tunedAdm command
-var tunedCmd = &cobra.Command{
-	Use:   "tuned",
-	Short: "Extract facts from tuned-adm command",
+// firewalldCmd represents the firewalld command
+var firewalldCmd = &cobra.Command{
+	Use:   "firewalld",
+	Short: "Extra facts for firewalld (firewall-cmd)",
 	Run: func(cmd *cobra.Command, args []string) {
-		tunedAll()
+		firewalldAll()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(tunedCmd)
+	rootCmd.AddCommand(firewalldCmd)
 }
 
-type tuned struct {
-	ActiveProfile string `json:"active_profile"`
+type firewalld struct {
+	DefaultZone string `json:"default_zone"`
 }
 
-var tunedOutput tuned
+var firewalldOutput firewalld
 
-func tunedAll() {
-	activeProfile()
+func firewalldAll() {
+	getDefaultZone()
 
-	jsonOut, err := json.Marshal(tunedOutput)
+	jsonOut, err := json.Marshal(firewalldOutput)
 	if err != nil {
 		log.Debugf("Failed to parse to JSON:", err)
 		return
@@ -64,14 +63,10 @@ func tunedAll() {
 	os.Stdout.Write(jsonOut)
 }
 
-func activeProfile() {
-	out, err := exec.Command("/usr/sbin/tuned-adm", "active").Output()
+func getDefaultZone() {
+	out, err := exec.Command("/usr/bin/firewall-cmd", "--get-default-zone").Output()
 	if err != nil {
 		log.Debugf("Failed to execute command: %v", err)
 	}
-	f := func(c rune) bool {
-		return c == ':' || unicode.IsControl(c)
-	}
-	fields := bytes.FieldsFunc(out, f)
-	tunedOutput.ActiveProfile = string(bytes.TrimSpace(fields[1]))
+	firewalldOutput.DefaultZone = string(bytes.TrimSpace(out))
 }
