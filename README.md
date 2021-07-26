@@ -60,7 +60,7 @@ Pull requests are welcome. For major changes, please open an issue first to
 discuss what you would like to change. 
 
 Some documentation for adding new commands and parsing command-line output and
-generating JSON can be found in [](docs/COINTRIBUTING.md).
+generating JSON can be found in [](docs/CONTRIBUTING.md).
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
