@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Joshua Rich
+# Copyright (c) 2021 Joshua Rich
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -68,10 +68,12 @@ func activeProfile() {
 	out, err := exec.Command("/usr/sbin/tuned-adm", "active").Output()
 	if err != nil {
 		log.Debugf("Failed to execute command: %v", err)
+		tunedOutput.ActiveProfile = ""
+	} else {
+		f := func(c rune) bool {
+			return c == ':' || unicode.IsControl(c)
+		}
+		fields := bytes.FieldsFunc(out, f)
+		tunedOutput.ActiveProfile = string(bytes.TrimSpace(fields[1]))
 	}
-	f := func(c rune) bool {
-		return c == ':' || unicode.IsControl(c)
-	}
-	fields := bytes.FieldsFunc(out, f)
-	tunedOutput.ActiveProfile = string(bytes.TrimSpace(fields[1]))
 }

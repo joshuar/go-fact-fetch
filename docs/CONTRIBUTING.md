@@ -11,11 +11,11 @@ cobra add <some_command>
 When adding commands:
 - The command name should closely follow the name of whatever command-line tool
   it is generating output from.  For example, for the `nmcli` command from
-  NetworkManager it is just `go-gadget-go nmcli` and the output of 
+  NetworkManager it is just `go-fact-fetch nmcli` and the output of 
   `nmcli connection` and `nmcli device` is produced from this command. For `tuned-adm`,
-  it is just `go-gadget-go tuned` for simplicity.  
+  it is just `go-fact-fetch tuned` for simplicity.  
 - You can have sub-commands to *filter* the output.  For example, 
-  `go-gadget-go nmcli connection` shows just output from the 
+  `go-fact-fetch nmcli connection` shows just output from the 
   `nmcli connection show` command.
 
 ## Development tips

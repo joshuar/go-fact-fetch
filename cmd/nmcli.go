@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Josh Rich
+# Copyright (c) 2021 Josh Rich
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -71,7 +71,7 @@ func init() {
 var nmcliOutput nmcli
 
 var connectionCmd = &cobra.Command{
-	Use:   "go-gadget-go nmcli connection",
+	Use:   "go-fact-fetch nmcli connection",
 	Short: "Get overview of connections from NetworkManager",
 	Run: func(cmd *cobra.Command, args []string) {
 		nmcliConnection()
@@ -80,7 +80,7 @@ var connectionCmd = &cobra.Command{
 }
 
 var deviceCmd = &cobra.Command{
-	Use:   "go-gadget-go nmcli device",
+	Use:   "go-fact-fetch nmcli device",
 	Short: "Get overview of devices from NetworkManager",
 	Run: func(cmd *cobra.Command, args []string) {
 		nmcliDevice()
@@ -98,24 +98,25 @@ func nmcliConnection() {
 	out, err := exec.Command("/usr/bin/nmcli", "--terse", "connection", "show").Output()
 	if err != nil {
 		log.Debugf("Failed to execute command: %v", err)
-		return
-	}
-	lines := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
-	f := func(c rune) bool {
-		return c == ':' || unicode.IsControl(c)
-	}
-	nmcliOutput.Connections = make([]connection, len(lines))
-	for l := range lines {
-		f := bytes.FieldsFunc(lines[l], f)
-		c := connection{
-			Name: string(f[0]),
-			Uuid: string(f[1]),
-			Conn: string(f[2]),
+		nmcliOutput.Connections = nil
+	} else {
+		lines := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
+		f := func(c rune) bool {
+			return c == ':' || unicode.IsControl(c)
 		}
-		if len(f) > 3 {
-			c.Device = string(f[3])
+		nmcliOutput.Connections = make([]connection, len(lines))
+		for l := range lines {
+			f := bytes.FieldsFunc(lines[l], f)
+			c := connection{
+				Name: string(f[0]),
+				Uuid: string(f[1]),
+				Conn: string(f[2]),
+			}
+			if len(f) > 3 {
+				c.Device = string(f[3])
+			}
+			nmcliOutput.Connections[l] = c
 		}
-		nmcliOutput.Connections[l] = c
 	}
 }
 
@@ -123,24 +124,25 @@ func nmcliDevice() {
 	out, err := exec.Command("/usr/bin/nmcli", "--terse", "device").Output()
 	if err != nil {
 		log.Debugf("Failed to execute command: %v", err)
-		return
-	}
-	lines := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
-	f := func(c rune) bool {
-		return c == ':' || unicode.IsControl(c)
-	}
-	nmcliOutput.Devices = make([]device, len(lines))
-	for l := range lines {
-		f := bytes.FieldsFunc(lines[l], f)
-		c := device{
-			Device: string(f[0]),
-			Medium: string(f[1]),
-			State:  string(f[2]),
+		nmcliOutput.Devices = nil
+	} else {
+		lines := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
+		f := func(c rune) bool {
+			return c == ':' || unicode.IsControl(c)
 		}
-		if len(f) > 3 {
-			c.Connection = string(f[3])
+		nmcliOutput.Devices = make([]device, len(lines))
+		for l := range lines {
+			f := bytes.FieldsFunc(lines[l], f)
+			c := device{
+				Device: string(f[0]),
+				Medium: string(f[1]),
+				State:  string(f[2]),
+			}
+			if len(f) > 3 {
+				c.Connection = string(f[3])
+			}
+			nmcliOutput.Devices[l] = c
 		}
-		nmcliOutput.Devices[l] = c
 	}
 }
 
@@ -148,7 +150,7 @@ func nmCliJson() {
 	jsonOut, err := json.Marshal(nmcliOutput)
 	if err != nil {
 		log.Debugf("Failed to parse to JSON:", err)
-		return
+		os.Stdout.Write(nil)
 	}
 	os.Stdout.Write(jsonOut)
 }

@@ -18,14 +18,14 @@ changelog:
       - '^test:'
 nfpms:
   -
-    id: github.com/joshuar/go-gadget-go
-    package_name: go-gadget-go
+    id: github.com/joshuar/go-fact-fetch
+    package_name: go-fact-fetch
     vendor: github.com/joshuar
-    homepage: https://github.com/joshuar/go-gadget-go
+    homepage: https://github.com/joshuar/go-fact-fetch
     maintainer: Josh Rich <joshua.rich@gmail.com>
     description: Generate extra facts for Ansible from command-line tools
     license: MIT
-    release: 1
+    release: "1"
     formats:
       - deb
       - rpm
@@ -38,18 +38,18 @@ nfpms:
       - ansible
     bindir: /usr/bin
     contents:
-      - src: assets/usr/bin/go-gadget-go.sh
-        dst: /usr/bin/go-gadget-go.sh
-      - src: /usr/bin/go-gadget-go.sh
+      - src: assets/usr/bin/go-fact-fetch.sh
+        dst: /usr/bin/go-fact-fetch.sh
+      - src: /usr/bin/go-fact-fetch.sh
         dst: /etc/ansible/facts.d/nmcli.fact
         type: "symlink"
-      - src: /usr/bin/go-gadget-go.sh
+      - src: /usr/bin/go-fact-fetch.sh
         dst: /etc/ansible/facts.d/tuned.fact
         type: "symlink"
-      - src: /usr/bin/go-gadget-go.sh
+      - src: /usr/bin/go-fact-fetch.sh
         dst: /etc/ansible/facts.d/firewalld.fact
         type: "symlink"
       - src: LICENSE
-        dst: /usr/share/go-gadget-go/LICENSE
+        dst: /usr/share/go-fact-fetch/LICENSE
       - src: README.md
-        dst: /usr/share/go-gadget-go/README.md
+        dst: /usr/share/go-fact-fetch/README.md

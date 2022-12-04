@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Joshua Rich
+# Copyright (c) 2021 Joshua Rich
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,6 +67,8 @@ func getDefaultZone() {
 	out, err := exec.Command("/usr/bin/firewall-cmd", "--get-default-zone").Output()
 	if err != nil {
 		log.Debugf("Failed to execute command: %v", err)
+		firewalldOutput.DefaultZone = ""
+	} else {
+		firewalldOutput.DefaultZone = string(bytes.TrimSpace(out))
 	}
-	firewalldOutput.DefaultZone = string(bytes.TrimSpace(out))
 }

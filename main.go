@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Josh Rich
+# Copyright (c) 2021 Josh Rich
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package main
 
-import "github.com/joshuar/go-gadget-go/cmd"
+import "github.com/joshuar/go-fact-fetch/cmd"
 
 func main() {
 	cmd.Execute()

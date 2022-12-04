@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Josh Rich
+# Copyright (c) 2021 Josh Rich
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ import (
 var (
 	debugFlag bool
 	rootCmd   = &cobra.Command{
-		Use:   "go-gadget-go",
+		Use:   "go-fact-fetch",
 		Short: "Generate extra facts for Ansible from command-line tools",
 		Long: `Generate extra or additional facts from various 
 	command-line tools. Allows extending the facts you can use
