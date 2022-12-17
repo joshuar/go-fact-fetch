@@ -52,6 +52,9 @@ nfpms:
       - src: /usr/bin/go-fact-fetch.sh
         dst: /etc/ansible/facts.d/zswap.fact
         type: "symlink"
+      - src: /usr/bin/go-fact-fetch.sh
+        dst: /etc/ansible/facts.d/loginctl.fact
+        type: "symlink"
       - src: LICENSE
         dst: /usr/share/go-fact-fetch/LICENSE
       - src: README.md
