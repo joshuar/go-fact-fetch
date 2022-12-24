@@ -48,26 +48,8 @@ func init() {
 	rootCmd.AddCommand(zswapCmd)
 }
 
-type zswapParameters struct {
-	Enabled                   bool   `json:"enabled"`
-	Same_filled_pages_enabled bool   `json:"same_filled_pages_enabled"`
-	Max_pool_percent          int    `json:"max_pool_percent"`
-	Compressor                string `json:"compressor"`
-	Zpool                     string `json:"zpool"`
-	Accept_threshold_percent  int    `json:"accept_threshold_percent"`
-}
-
-var zswapOutput zswapParameters
-
 func zswapAll() {
 	getZswapParameters()
-
-	jsonOut, err := json.Marshal(zswapOutput)
-	if err != nil {
-		log.Debugf("Failed to parse to JSON:", err)
-		return
-	}
-	os.Stdout.Write(jsonOut)
 }
 
 func getZswapParameters() {
@@ -79,32 +61,19 @@ func getZswapParameters() {
 		f := func(c rune) bool {
 			return c == ':' || unicode.IsControl(c)
 		}
+		valuesMap := make(map[string]string)
 		for l := range lines {
 			f := bytes.FieldsFunc(lines[l], f)
 			re := regexp.MustCompile(`(\w*)$`)
 			match := re.FindSubmatch(f[0])
-			switch string(match[0]) {
-			case "enabled":
-				if string(f[1]) == "Y" {
-					zswapOutput.Enabled = true
-				} else {
-					zswapOutput.Enabled = false
-				}
-			case "same_filled_pages_enabled":
-				if string(f[1]) == "Y" {
-					zswapOutput.Same_filled_pages_enabled = true
-				} else {
-					zswapOutput.Same_filled_pages_enabled = false
-				}
-			case "max_pool_percent":
-				json.Unmarshal(f[1], &zswapOutput.Max_pool_percent)
-			case "compressor":
-				zswapOutput.Compressor = string(f[1])
-			case "zpool":
-				zswapOutput.Zpool = string(f[1])
-			case "accept_threshold_percent":
-				json.Unmarshal(f[1], &zswapOutput.Accept_threshold_percent)
-			}
+			valuesMap[string(match[0])] = string(f[1])
 		}
+		jsonOut, err := json.Marshal(valuesMap)
+		if err != nil {
+			log.Debugf("Failed to parse to JSON:", err)
+			os.Stdout.Write(nil)
+		}
+		os.Stdout.Write(jsonOut)
+
 	}
 }

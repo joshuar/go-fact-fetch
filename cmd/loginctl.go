@@ -34,24 +34,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// type loginctl struct {
-// 	UID                    int       `json:"UID"`
-// 	GID                    int       `json:"GID"`
-// 	Name                   string    `json:"Name"`
-// 	Timestamp              time.Time `json:"Timestamp"`
-// 	TimestampMonotonic     int       `json:"TimestampMonotonic"`
-// 	RuntimePath            string    `json:"RuntimePath"`
-// 	Service                string    `json:"Service"`
-// 	Slice                  string    `json:"Slice"`
-// 	Display                int       `json:"Display"`
-// 	State                  string    `json:"State"`
-// 	Sessions               int       `json:"Sessions"`
-// 	IdleHint               bool      `json:"IdleHint"`
-// 	IdleSinceHint          int       `json:"IdleSinceHint"`
-// 	IdleSinceHintMonotonic int       `json:"IdleSinceHintMonotonic"`
-// 	Linger                 bool      `json:"Linger"`
-// }
-
 var loginctlCmd = &cobra.Command{
 	Use:   "loginctl",
 	Short: "Extract facts from loginctl command",
