@@ -1,42 +1,55 @@
 before:
   hooks:
     - go mod tidy
+report_sizes: true
+changelog:
+  use: github-native
+  sort: asc
+  abbrev: 0
+  filters:
+    exclude:
+      - "^docs:"
+      - typo
 builds:
   - env:
       - CGO_ENABLED=0
     goos:
       - linux
-checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ .Tag }}-next"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
+    goarch:
+      - amd64
+    hooks:
+      pre:
+        - go generate ./...
+signs:
+- cmd: cosign
+  stdin: '{{ .Env.COSIGN_PWD }}'
+  args:
+  - "sign-blob"
+  - "--key=cosign.key"
+  - "--output-signature=${signature}"
+  - "${artifact}"
+  - "--yes" # needed on cosign 2.0.0+
+  artifacts: all
+archives:
+  - format: binary
 nfpms:
-  -
-    id: github.com/joshuar/go-fact-fetch
+  - id: github.com/joshuar/go-fact-fetch
     package_name: go-fact-fetch
+    file_name_template: "{{ .ConventionalFileName }}"    
     vendor: github.com/joshuar
     homepage: https://github.com/joshuar/go-fact-fetch
     maintainer: Josh Rich <joshua.rich@gmail.com>
     description: Generate extra facts for Ansible from command-line tools
     license: MIT
-    release: "1"
     formats:
       - deb
       - rpm
-    replacements:
-      amd64: x86_64
-      386: i386
+      - archlinux
+    bindir: /usr/bin
+    release: "1"
     section: default
     priority: extra
-    recommends:
-      - ansible
-    bindir: /usr/bin
+    meta: false
     contents:
       - src: assets/usr/bin/go-fact-fetch.sh
         dst: /usr/bin/go-fact-fetch.sh
@@ -54,6 +67,9 @@ nfpms:
         type: "symlink"
       - src: /usr/bin/go-fact-fetch.sh
         dst: /etc/ansible/facts.d/loginctl.fact
+        type: "symlink"
+      - src: /usr/bin/go-fact-fetch.sh
+        dst: /etc/ansible/facts.d/systemctl.fact
         type: "symlink"
       - src: LICENSE
         dst: /usr/share/go-fact-fetch/LICENSE
